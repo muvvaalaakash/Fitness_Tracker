@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fitness-configmap
+data:
+  NODE_ENV: "production"
+  PORT: "5000"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,24 +31,23 @@ spec:
     spec:
       containers:
         - name: fitness-tracker-app
-          image: pulkit197/fitness_tracker-master-copy3-fitness-app:latest
+          image: pulkit197/fitness_tracker-master-copy3-fitness-app:v1   # ❗ fixed (no latest)
           ports:
             - containerPort: 5000
+
           resources:
             limits:
-              memory: "512Mi" 
+              memory: "512Mi"
               cpu: "200m"
             requests:
               memory: "256Mi"
               cpu: "100m"
-          # ✔ All configMap vars removed
-          # ✔ Direct env variables added
+
           envFrom:
             - configMapRef:
                 name: fitness-configmap
+
           env:
-            
-            # Datadog APM (tracing) env variables
             - name: DD_AGENT_HOST
               valueFrom:
                 fieldRef:
@@ -53,8 +60,24 @@ spec:
               value: "fitness-tracker-app"
             - name: DD_VERSION
               value: "1.0.0"
----
 
+          # ✅ Liveness Probe (restart if app is dead)
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          # ✅ Readiness Probe (traffic only if ready)
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -63,6 +86,6 @@ spec:
   selector:
     app: fitness-tracker-app
   ports:
-  - port: 80
-    targetPort: 5000
+    - port: 80
+      targetPort: 5000
   type: ClusterIP
