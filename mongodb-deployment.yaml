@@ -29,9 +29,12 @@ spec:
           requests:
             memory: "256Mi"
             cpu: "100m"
+        volumeMounts:
+          - name: akash-data
+            mountPath: /data/db
       volumes:
        - name: akash-data
-         emptyDir: {}
+         emptyDir: "512Mi"
 ---
 apiVersion: v1
 kind: Service
