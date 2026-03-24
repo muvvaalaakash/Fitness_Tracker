@@ -23,7 +23,7 @@ spec:
               echo "Triggering OOM...";
               data="";
               while true; do
-                data="$data$(head -c 20M </dev/zero)";
+                head -c 50M </dev/zero > /dev/null
               done
 
           ports:
