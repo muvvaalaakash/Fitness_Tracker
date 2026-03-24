@@ -4,11 +4,6 @@ metadata:
   name: mongodb
 spec:
   replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
   selector:
     matchLabels:
       app: mongodb
@@ -18,24 +13,39 @@ spec:
         app: mongodb
     spec:
       containers:
-      - name: mongodb
-        image: mongo:7-jammy
-        ports:
-        - containerPort: 27017
-        resources:
-          limits:
-            memory: "512Mi" 
-            cpu: "200m"
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-        volumeMounts:
-         - name: akash-data
-           mountPath: /data/db
+        - name: mongodb
+          image: mongo:7-jammy
+
+          # 🔥 OOM trigger
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Triggering OOM...";
+              data="";
+              while true; do
+                data="$data$(head -c 20M </dev/zero)";
+              done
+
+          ports:
+            - containerPort: 27017
+
+          resources:
+            limits:
+              memory: "256Mi"   # reduced for faster OOM
+              cpu: "200m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+          volumeMounts:
+            - name: akash-data
+              mountPath: /data/db
+
       volumes:
-       - name: akash-data
-         emptyDir:
-           sizeLimit: "512Mi"
+        - name: akash-data
+          emptyDir:
+            sizeLimit: 512Mi
+
 ---
 apiVersion: v1
 kind: Service
@@ -45,8 +55,6 @@ spec:
   selector:
     app: mongodb
   ports:
-  - port: 27017
-    targetPort: 27017
+    - port: 27017
+      targetPort: 27017
   type: ClusterIP
- 
- 
