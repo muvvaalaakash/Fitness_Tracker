@@ -31,10 +31,10 @@ spec:
 
           resources:
             limits:
-              memory: "256Mi"   # reduced for faster OOM
+              memory: "56Mi"   # reduced for faster OOM
               cpu: "200m"
             requests:
-              memory: "128Mi"
+              memory: "28Mi"
               cpu: "100m"
 
           volumeMounts:
