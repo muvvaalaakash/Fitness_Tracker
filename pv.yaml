@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistantVolume
 metadata:
-  name: mongo-pv
+  name: fit-pv
 spec: 
   capacity:
     storage: 10Gi
