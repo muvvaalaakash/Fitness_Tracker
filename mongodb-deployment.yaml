@@ -29,13 +29,13 @@ spec:
               cpu: "100m"
 
           volumeMounts:
-            - name: akash-data
+            - name: fit-vol
               mountPath: /data/db
 
       volumes:
-        - name: akash-data
-          emptyDir:
-            sizeLimit: 512Mi
+        - name: fit-vol
+          persistentVolumeClaim:
+            claimName: fitness-pvc
 
 ---
 apiVersion: v1
