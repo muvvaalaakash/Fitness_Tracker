@@ -34,7 +34,7 @@ spec:
         #         values:
         #         - test # actual test for checking changed to testing
           podAffinity:
-            preferredDuringSchedulingIgnoredDuringExecution:
+            requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector: 
                 matchExpressions:
                 - key: app
