@@ -33,15 +33,15 @@ spec:
         #         operator: In
         #         values:
         #         - test # actual test for checking changed to testing
-          podAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector: 
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - fitness-tracker-app
-              topologyKey: topology.kubernetes.io/hostname
+          # podAffinity:
+          #   requiredDuringSchedulingIgnoredDuringExecution:
+          #   - labelSelector: 
+          #       matchExpressions:
+          #       - key: app
+          #         operator: In
+          #         values:
+          #         - fitness-tracker-app
+          #     topologyKey: topology.kubernetes.io/hostname
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
