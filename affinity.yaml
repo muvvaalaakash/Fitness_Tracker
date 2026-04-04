@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fit-deployment
+  namespace: akash-ns
+  labels:
+    app: fitness-tracker-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fitness-tracker-app
+  template:
+    metadata:
+      labels:
+        app: fitness-tracker-app
+    spec:
+      affinity:
+        # nodeAffinity:
+        #   requiredDuringSchedulingIgnoredDuringExecution:
+        #     nodeSelectorTerms:
+        #     - matchExpressions:
+        #       - key: env
+        #         operator: In
+        #         values:
+        #         - testing
+
+        #   preferredDuringSchedulingIgnoredDuringExecution:
+        #   - weight: 1
+        #     preference:
+        #       matchExpressions:
+        #       - key: envs
+        #         operator: In
+        #         values:
+        #         - test # actual test for checking changed to testing
+          podAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector: 
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - fitness-tracker-app
+              topologyKey: topology.kubernetes.io/hostname
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - fitness-tracker-app
+                topologyKey: topology.kubernetes.io/hostname
+
+      containers:
+      - name: fitness-tracker-app
+        image: pulkit197/fitness_tracker-master-copy3-fitness-app:latest
+        ports:
+        - containerPort: 5000
