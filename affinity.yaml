@@ -15,7 +15,7 @@ spec:
       labels:
         app: fitness-tracker-app
     spec:
-      affinity:
+      # affinity:
         # nodeAffinity:
         #   requiredDuringSchedulingIgnoredDuringExecution:
         #     nodeSelectorTerms:
@@ -33,14 +33,14 @@ spec:
         #         operator: In
         #         values:
         #         - test # actual test for checking changed to testing
-            podAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
-                podAffinityTerm:
-                  labelSelector:
-                    matchLabels:
-                      app: fitness-tracker-app
-                  topologyKey: kubernetes.io/hostname
+            # podAffinity:
+            #   preferredDuringSchedulingIgnoredDuringExecution:
+            #   - weight: 100
+            #     podAffinityTerm:
+            #       labelSelector:
+            #         matchLabels:
+            #           app: fitness-tracker-app
+            #       topologyKey: kubernetes.io/hostname
           # podAntiAffinity:
           #   preferredDuringSchedulingIgnoredDuringExecution:
           #   - weight: 100
@@ -52,7 +52,11 @@ spec:
           #           values:
           #           - fitness-tracker-app
           #       topologyKey: topology.kubernetes.io/hostname
-
+      tolerations:
+      - key: "key1"
+        operator: "Equal"
+        value: "value1"
+        effect: "NoSchedule"
       containers:
       - name: fitness-tracker-app
         image: pulkit197/fitness_tracker-master-copy3-fitness-app:latest
