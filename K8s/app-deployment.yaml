@@ -4,7 +4,7 @@ metadata:
   name: fitness-tracker-app
   # namespace: akash-ns
 spec:
-  replicas: 5
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
