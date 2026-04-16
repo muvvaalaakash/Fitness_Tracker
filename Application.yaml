@@ -7,7 +7,7 @@ spec:
   project: default   # keep default for now
 
   source:
-    repoURL: https://github.com/aravindroy1/Fitness_Tracker.git
+    repoURL: https://github.com/muvvaalaakash/Fitness_Tracker.git
     targetRevision: HEAD
     path: K8s
 
